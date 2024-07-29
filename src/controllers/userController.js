@@ -1,9 +1,13 @@
-// Dummy database (in-memory storage)
+const Profile = require('../models/profile');
 
-const getProfile = (req, res) => {
-  // This route requires authentication
-  // Access user information from req.user
-  res.json({ user: req.user });
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const data = await Profile.find({ user: userId });
+    res.json({ data });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 module.exports = { getProfile };
