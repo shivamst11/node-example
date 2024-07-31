@@ -21,7 +21,7 @@ const getFiles = async (req, res) => {
       })
     );
 
-    res.json({ files: filesWithProfiles });
+    res.json({ data: { files: filesWithProfiles } });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

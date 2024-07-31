@@ -11,7 +11,7 @@ const generateAccessToken = (userId) => {
 
 const generateRefreshToken = (userId) => {
   return jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: '3m',
+    expiresIn: '10m',
   });
 };
 
@@ -51,7 +51,7 @@ const signin = async (req, res) => {
   try {
     const user = await User.findOne({ username }).exec();
     if (!user) {
-      return res.json({
+      return res.status(401).json({
         isAuth: false,
         message: 'Auth failed, username not found',
       });
@@ -107,4 +107,4 @@ const refreshToken = (req, res) => {
   });
 };
 
-module.exports = { signup, signin, logout, refreshToken };
+module.exports = { signup, signin, logout, refreshToken, signin2 };
