@@ -5,13 +5,13 @@ const File = require('../models/files');
 
 const generateAccessToken = (userId) => {
   return jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '10m',
+    expiresIn: '1d',
   });
 };
 
 const generateRefreshToken = (userId) => {
   return jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: '10m',
+    expiresIn: '10d',
   });
 };
 
@@ -38,7 +38,7 @@ const signup = async (req, res) => {
     const profile = new Profile({ user: userData._id, email: username });
     await profile.save();
     res
-      .status(201)
+      .status(200)
       .json({ message: 'User created successfully', user: newUser.username });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -48,12 +48,15 @@ const signup = async (req, res) => {
 const signin = async (req, res) => {
   const { username, password } = req.body;
 
+  res.status(200);
   try {
     const user = await User.findOne({ username }).exec();
     if (!user) {
-      return res.status(401).json({
-        isAuth: false,
-        message: 'Auth failed, username not found',
+      return res.status(200).json({
+        data: {
+          isAuth: false,
+          message: 'Auth failed, username not found',
+        },
       });
     }
 
@@ -107,4 +110,4 @@ const refreshToken = (req, res) => {
   });
 };
 
-module.exports = { signup, signin, logout, refreshToken, signin2 };
+module.exports = { signup, signin, logout, refreshToken };
